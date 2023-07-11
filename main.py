@@ -2,40 +2,7 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import matplotlib.pyplot as plt
-import pandas as pd
-import matplotlib.pyplot as plt
-from tkinter import *
 import numpy as np
-
-
-# Entrada dos valores de preço e avaliação
-historico_input = 8
-estabilidade_input = 25
-
-
-def fuzzy_augorithm():
-    historico_input = int(history_input_entry.get())
-    estabilidade_input = int(stability_input_entry.get())
-
-    # Passa os valores de entrada para o sistema de controle fuzzy
-    sistema_simulacao.input['historico'] = historico_input
-    sistema_simulacao.input['estabilidade'] = estabilidade_input
-
-    # Realiza a avaliação do sistema fuzzy
-    sistema_simulacao.compute()
-
-    # Obtém o valor de saída (previsão de vendas)
-    analise_credito = sistema_simulacao.output['risco']
-
-    # Exibe o resultado
-    print(f"A análise de risco de crédito é: {analise_credito:.2f}")
-
-    risco.view(sim=sistema_simulacao)
-
-
-
-def generate_fuzzy():
-    fuzzy_augorithm()
 
 
 # Cria as variáveis fuzzy
@@ -69,45 +36,25 @@ sistema_simulacao = ctrl.ControlSystemSimulation(sistema_ctrl)
 historico.view()
 estabilidade.view()
 
-root = Tk()
-root.title('Fuzzy - Análise de Crédito')
-root.resizable(False, False)
+# Entrada dos valores de preço e avaliação
+historico_input = 8
+estabilidade_input = 25
 
-input_frame = Frame(root)  # Cria um Frame para agrupar os widgets
-input_frame.pack(padx=10, pady=10)
+historico_input = int(historico_input)
+estabilidade_input = int(estabilidade_input)
 
-###### HISTORY INPUT #######################################################################################
+# Passa os valores de entrada para o sistema de controle fuzzy
+sistema_simulacao.input['historico'] = historico_input
+sistema_simulacao.input['estabilidade'] = estabilidade_input
 
-history_input_label = Label(
-    input_frame, text="Histórico (0-10): ", font=("Helvetica", 13))
-history_input_label.grid(
-    row=0, column=0, padx=5, pady=5, sticky="w")
+# Realiza a avaliação do sistema fuzzy
+sistema_simulacao.compute()
 
-history_input_entry = Entry(
-    input_frame, font=("Helvetica", 13))
-history_input_entry.grid(
-    row=0, column=1, padx=5, pady=5, sticky="w")
+# Obtém o valor de saída (previsão de vendas)
+analise_credito = sistema_simulacao.output['risco']
 
-history_input_entry.insert(0, historico_input)
+# Exibe o resultado
+print(f"A análise de risco de crédito é: {analise_credito:.2f}")
 
+risco.view(sim=sistema_simulacao)
 
-###### STABILITY INPUT ##################################################################################
-
-stability_input_label = Label(
-    input_frame, text="Estabilidade (0-40 anos): ", font=("Helvetica", 13))
-stability_input_label.grid(
-    row=1, column=0, padx=5, pady=5, sticky="w")
-
-stability_input_entry = Entry(
-    input_frame, font=("Helvetica", 13))
-stability_input_entry.grid(
-    row=1, column=1, padx=5, pady=5, sticky="w")
-
-stability_input_entry.insert(0, estabilidade_input)
-
-generate_button = Button(input_frame, text="Analisar", font=(
-    "Helvetica", 12), command=generate_fuzzy)
-generate_button.grid(row=2, column=0, columnspan=2, pady=5)
-
-
-root.mainloop()
